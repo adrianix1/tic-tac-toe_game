@@ -30,13 +30,15 @@ def update_board(board_in, mark, move=10):
 
 
 def if_win(player_moves_, computer_moves_):
+    player_moves_ = set(player_moves_)
+    computer_moves_ = set(computer_moves_)
     for wins in WIN:
-        if wins == player_moves_:
+        if set(wins).issubset(player_moves_):
             print("player won!")
-            break
-        elif wins == computer_moves_:
+            return True
+        elif set(wins).issubset(computer_moves_):
             print("computer won!")
-            break
+            return True
 
 
 player_mark = -1
@@ -59,22 +61,29 @@ else:
     update_board(x_and_o_list, computer_mark, computer_move)
 
 # TODO 3: input which position player wants to put his mark, check taken positions, keep track of moves in list
-player_move = -1
-while player_move not in fields_left:
-    if player_move == -1:
-        pass
-    else:
-        print("Error. Type a valid number.")
-    player_move = int(input('Which field do you want to put your mark? '))
-player_moves.append(player_move)
-fields_left.remove(player_move)
-update_board(x_and_o_list, player_mark, player_move)
-if_win(player_moves, computer_moves)
+is_on = True
+while is_on:
+
+    player_move = -1
+    while player_move not in fields_left:
+        if player_move == -1:
+            pass
+        else:
+            print("Error. Type a valid number.")
+        player_move = int(input('Which field do you want to put your mark? '))
+    player_moves.append(player_move)
+    fields_left.remove(player_move)
+    update_board(x_and_o_list, player_mark, player_move)
+    if if_win(player_moves, computer_moves):
+        is_on = False
+        break
 
 # TODO 4: after player puts his mark computer also does it and board is plotted again
-computer_move = computer_random_move(fields_left, computer_moves)
-update_board(x_and_o_list, computer_mark, computer_move)
-if_win(player_moves, computer_moves)
+    computer_move = computer_random_move(fields_left, computer_moves)
+    update_board(x_and_o_list, computer_mark, computer_move)
+    if if_win(player_moves, computer_moves):
+        is_on = False
+        break
 
 # TODO 5: check if computer or player wins, compare with winning combinations
 # TODO 6: after the end of game input if player wants to play again
