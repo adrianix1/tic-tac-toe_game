@@ -1,5 +1,6 @@
 from random import choice
 START_LIST = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+WIN = [[1, 2, 3], [4, 5, 6], [7, 8, 9], [1, 4, 7], [2, 5, 8], [3, 6, 9], [1, 5, 9], [3, 5, 7]]
 
 # TODO 1: input which mark player wants to chose
 
@@ -26,6 +27,16 @@ def update_board(board_in, mark, move=10):
             f"{board_in[6]}|{board_in[7]}|{board_in[8]}\n"
     print(board)
     return board_in
+
+
+def if_win(player_moves_, computer_moves_):
+    for wins in WIN:
+        if wins == player_moves_:
+            print("player won!")
+            break
+        elif wins == computer_moves_:
+            print("computer won!")
+            break
 
 
 player_mark = -1
@@ -58,10 +69,12 @@ while player_move not in fields_left:
 player_moves.append(player_move)
 fields_left.remove(player_move)
 update_board(x_and_o_list, player_mark, player_move)
+if_win(player_moves, computer_moves)
 
 # TODO 4: after player puts his mark computer also does it and board is plotted again
 computer_move = computer_random_move(fields_left, computer_moves)
 update_board(x_and_o_list, computer_mark, computer_move)
+if_win(player_moves, computer_moves)
 
 # TODO 5: check if computer or player wins, compare with winning combinations
 # TODO 6: after the end of game input if player wants to play again
