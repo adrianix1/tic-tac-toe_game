@@ -1,4 +1,4 @@
-from random import randint
+from random import choice
 START_LIST = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
 # TODO 1: input which mark player wants to chose
@@ -10,8 +10,11 @@ def convert_0(mark):
     return mark
 
 
-def computer_random_move():
-    return randint(1, 9)
+def computer_random_move(fields_left_list, computer_moves_list):
+    computer_move_f = choice(fields_left_list)
+    fields_left_list.remove(computer_move_f)
+    computer_moves_list.append(computer_move_f)
+    return computer_move_f
 
 
 def update_board(board_in, mark, move=10):
@@ -20,7 +23,7 @@ def update_board(board_in, mark, move=10):
             board_in[el] = mark
     board = f"{board_in[0]}|{board_in[1]}|{board_in[2]}\n-+-+-\n" \
             f"{board_in[3]}|{board_in[4]}|{board_in[5]}\n-+-+-\n" \
-            f"{board_in[6]}|{board_in[7]}|{board_in[8]}"
+            f"{board_in[6]}|{board_in[7]}|{board_in[8]}\n"
     print(board)
     return board_in
 
@@ -41,9 +44,7 @@ if player_mark == "X":
     update_board(x_and_o_list, computer_mark)
 else:
     computer_mark = "X"
-    computer_move = computer_random_move()
-    fields_left.remove(computer_move)
-    computer_moves.append(computer_move)
+    computer_move = computer_random_move(fields_left, computer_moves)
     update_board(x_and_o_list, computer_mark, computer_move)
 
 # TODO 3: input which position player wants to put his mark, check taken positions, keep track of moves in list
@@ -57,6 +58,10 @@ while player_move not in fields_left:
 player_moves.append(player_move)
 fields_left.remove(player_move)
 update_board(x_and_o_list, player_mark, player_move)
+
 # TODO 4: after player puts his mark computer also does it and board is plotted again
+computer_move = computer_random_move(fields_left, computer_moves)
+update_board(x_and_o_list, computer_mark, computer_move)
+
 # TODO 5: check if computer or player wins, compare with winning combinations
 # TODO 6: after the end of game input if player wants to play again
