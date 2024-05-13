@@ -1,7 +1,7 @@
 from random import choice
 START_LIST = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 WIN = [[1, 2, 3], [4, 5, 6], [7, 8, 9], [1, 4, 7], [2, 5, 8], [3, 6, 9], [1, 5, 9], [3, 5, 7]]
-
+AGAIN = 'Y'
 # TODO 1: input which mark player wants to chose
 
 
@@ -41,49 +41,54 @@ def if_win(player_moves_, computer_moves_):
             return True
 
 
-player_mark = -1
-while player_mark not in ("X", "O"):
-    player_mark = input("Provide a valid mark (X, O): ").upper()
-    player_mark = convert_0(player_mark)
+def game():
+    player_mark = -1
+    while player_mark not in ("X", "O"):
+        player_mark = input("Provide a valid mark (X, O): ").upper()
+        player_mark = convert_0(player_mark)
 
-# TODO 2: print possible positions, 9 digits to chose from
-fields_left = START_LIST.copy()
-x_and_o_list = START_LIST.copy()
-computer_moves = []
-player_moves = []
+    # TODO 2: print possible positions, 9 digits to chose from
+    fields_left = START_LIST.copy()
+    x_and_o_list = START_LIST.copy()
+    computer_moves = []
+    player_moves = []
 
-if player_mark == "X":
-    computer_mark = "O"
-    update_board(x_and_o_list, computer_mark)
-else:
-    computer_mark = "X"
-    computer_move = computer_random_move(fields_left, computer_moves)
-    update_board(x_and_o_list, computer_mark, computer_move)
+    if player_mark == "X":
+        computer_mark = "O"
+        update_board(x_and_o_list, computer_mark)
+    else:
+        computer_mark = "X"
+        computer_move = computer_random_move(fields_left, computer_moves)
+        update_board(x_and_o_list, computer_mark, computer_move)
 
-# TODO 3: input which position player wants to put his mark, check taken positions, keep track of moves in list
-is_on = True
-while is_on:
+    # TODO 3: input which position player wants to put his mark, check taken positions, keep track of moves in list
+    is_on = True
+    while is_on:
 
-    player_move = -1
-    while player_move not in fields_left:
-        if player_move == -1:
-            pass
-        else:
-            print("Error. Type a valid number.")
-        player_move = int(input('Which field do you want to put your mark? '))
-    player_moves.append(player_move)
-    fields_left.remove(player_move)
-    update_board(x_and_o_list, player_mark, player_move)
-    if if_win(player_moves, computer_moves):
-        is_on = False
-        break
+        player_move = -1
+        while player_move not in fields_left:
+            if player_move == -1:
+                pass
+            else:
+                print("Error. Type a valid number.")
+            player_move = int(input('Which field do you want to put your mark? '))
+        player_moves.append(player_move)
+        fields_left.remove(player_move)
+        update_board(x_and_o_list, player_mark, player_move)
+        if if_win(player_moves, computer_moves) or len(fields_left) == 0:
+            break
 
-# TODO 4: after player puts his mark computer also does it and board is plotted again
-    computer_move = computer_random_move(fields_left, computer_moves)
-    update_board(x_and_o_list, computer_mark, computer_move)
-    if if_win(player_moves, computer_moves):
-        is_on = False
-        break
+    # TODO 4: after player puts his mark computer also does it and board is plotted again
+        computer_move = computer_random_move(fields_left, computer_moves)
+        update_board(x_and_o_list, computer_mark, computer_move)
+        if if_win(player_moves, computer_moves) or len(fields_left) == 0:
+            break
+    global AGAIN
+    AGAIN = input("Do you want to play again? (Y/N): ")
 
 # TODO 5: check if computer or player wins, compare with winning combinations
 # TODO 6: after the end of game input if player wants to play again
+
+
+while AGAIN.upper() == "Y":
+    game()
